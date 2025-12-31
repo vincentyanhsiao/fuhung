@@ -62,7 +62,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               onClick={() => onNavigate('admin')}
               className="text-[10px] text-gray-700 hover:text-[#8C7355] transition-colors uppercase font-bold tracking-widest border border-gray-800 px-2 py-0.5"
             >
-              [管理入口]
+
             </button>
           </div>
           <div className="flex gap-8 text-[10px] text-gray-500 tracking-[0.2em] uppercase font-medium">
