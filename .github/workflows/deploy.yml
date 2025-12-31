@@ -1,12 +1,8 @@
-name: Deploy static content to Pages
+name: Deploy to GitHub Pages
 
 on:
-  # 当推送到 main 分支时触发部署
   push:
-    branches: ['main']
-
-  # 允许从 Actions 选项卡手动运行工作流
-  workflow_dispatch:
+    branches: ["main"] # 确保这里是你的主分支名称，可能是 master
 
 permissions:
   contents: read
@@ -14,41 +10,39 @@ permissions:
   id-token: write
 
 concurrency:
-  group: 'pages'
+  group: "pages"
   cancel-in-progress: true
 
 jobs:
-  # 单次部署任务
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-
       - name: Install dependencies
         run: npm ci
-
       - name: Build
         run: npm run build
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
+        env:
+           # 如果需要 API Key，需要在 GitHub Settings -> Secrets 中设置
+           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 上传 dist 文件夹
-          path: './dist'
+          path: ./dist
 
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
