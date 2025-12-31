@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SectionId } from '../types';
 
@@ -58,12 +57,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <p className="text-[10px] text-gray-500 tracking-[0.2em] font-medium uppercase">
               © 2026 FUHUNG GALLERY.
             </p>
-            <button 
-              onClick={() => onNavigate('admin')}
-              className="text-[10px] text-gray-700 hover:text-[#8C7355] transition-colors uppercase font-bold tracking-widest border border-gray-800 px-2 py-0.5"
-            >
-
-            </button>
+            {/* [管理入口] 按钮已被移除 */}
           </div>
           <div className="flex gap-8 text-[10px] text-gray-500 tracking-[0.2em] uppercase font-medium">
             <button onClick={() => onNavigate('privacy')} className="hover:text-white transition-colors">隐私政策</button>
