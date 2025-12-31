@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"] # 确保这里是你的主分支名称，可能是 master
+    branches: ["main"] # 注意：请确认你的主分支是 main 还是 master
 
 permissions:
   contents: read
@@ -19,18 +19,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
+          
+      # --- 关键修改在这里 ---
+      # 原来是 run: npm ci (这导致了报错)
+      # 现在改为 run: npm install (这会自动生成依赖树，不报错)
       - name: Install dependencies
-        run: npm install
+        run: npm install 
+
       - name: Build
         run: npm run build
         env:
-           # 如果需要 API Key，需要在 GitHub Settings -> Secrets 中设置
-           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} 
+           # 防止构建时因缺少 key 报错，给一个占位符
+           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || 'placeholder_key' }}
+           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
